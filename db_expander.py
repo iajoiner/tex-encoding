@@ -18,14 +18,14 @@ def individual_process(font, code, tex_string, tex_engine = 'latex'):
     individual_output['tacc'] = test_res[2]#text accent
     individual_output['macc'] = test_res[3]#math accent
     if font == 'cmti':#text italic
-        individual_output['font'] = 'it'
+        individual_output['font'] = 'textit'
     elif font == 'cmbx':#bold
-        individual_output['font'] = 'bf'
+        individual_output['font'] = 'textbf'
     else:
         individual_output['font'] = 'rm'
     if font == 'cmsy' and code >= 65 and code <= 90:#mathcal
         individual_output['value'] = tex_string[-2]
-        individual_output['font'] = 'cal'
+        individual_output['font'] = 'mathcal'
     if latex_package_list:
         individual_output['packages'] = latex_package_list
     return individual_output
