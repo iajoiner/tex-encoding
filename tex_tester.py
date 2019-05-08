@@ -27,7 +27,7 @@ def process(tex_string, mode = 0):
         print(f'Unknown mode: {mode}')
         return tex_string
 def run_test(tex_string, tex_engine = 'latex', latex_packages = [], test_mode = False):
-    accent_pattern = re.compile(r'\\[`\'^~"Hrvut=.bcdk]$|\\vec$')
+    accent_pattern = re.compile(r'\\[`\'^~"Hrvut=.bcdk]$|\\vec$|\\widetilde$|\\widehat$')
     is_accent = False
     if not test_mode:
         filename = 'TEX_TESTING'
