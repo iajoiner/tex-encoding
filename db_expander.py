@@ -29,6 +29,10 @@ def individual_process(font, code, tex_string, tex_engine = 'latex'):
     if latex_package_list:
         individual_output['packages'] = latex_package_list
     return individual_output
+def individual_change_font(font, individual_output):
+    modified_individual_output = individual_output
+    modified_individual_output['font'] = font
+    return modified_individual_output
 #Process an array of TeX symbols related to a font
 def array_process(font, array, start = 0, end = 127, tex_engine = 'latex'):    
     code_range = range(start, end + 1)
@@ -36,10 +40,17 @@ def array_process(font, array, start = 0, end = 127, tex_engine = 'latex'):
     for code in code_range:
         output[code] = individual_process(font, code, array[code - start], tex_engine)
     return output
+def array_change_font(font, output):
+    modified_output = {}
+    for key in output:
+        modified_output[key] = individual_change_font(font, output[key])
+    return modified_output
 expanded_dict = {}
 with open('/Users/CatLover/Documents/Tex/dvi2tex/symbol_db.json', 'r') as json_file:
     db_dict = json.load(json_file)
     for key in db_dict.keys():
         expanded_dict[key] = array_process(key, db_dict[key])
+    expanded_dict['cmti'] = array_change_font('textit', expanded_dict['cmr'])
+    expanded_dict['cmbx'] = array_change_font('textbf', expanded_dict['cmr'])
     with open('/Users/CatLover/Documents/Tex/dvi2tex/expanded_symbol_db.json', 'w') as new_json_file:
         json.dump(expanded_dict, new_json_file)
