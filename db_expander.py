@@ -3,7 +3,10 @@ import re
 import tex_tester
 MATHDIC={'\\^':'\\hat','\\v':'\\check','\\u':'\\breve','\\`':'\\grave','\\~':'\\tilde','\\=':'\\bar','\\.':'\\dot','\\"':'\\ddot',"\\'": '\\acute'}
 def individual_process(font, code, tex_string, tex_engine = 'latex'):
+    
     math_pattern = re.compile(r'\$\S*\$')
+    math_symbol_pattern = re.compile(r'[+\-\*\/=().]')
+    digit_pattern = re.compile(r'[0-9]')
     text_font_pattern = re.compile(r'\\text\S+{\S+}')
     math_font_pattern = re.compile(r'\$\\math\S+{\S+}\$')
     text_accent_pattern = re.compile(r'\\[`\'^~"Hrvut=.bcdk]$')
@@ -44,13 +47,13 @@ def individual_process(font, code, tex_string, tex_engine = 'latex'):
             individual_output['mav'] = MATHDIC[tex_string]
         elif nonmath_text_accent_pattern.search(tex_string):
             individual_output['usage'] = 'ta'
+        elif math_symbol_pattern.search(tex_string):
+            individual_output['usage'] = 'tm'
+        elif digit_pattern.search(tex_string):
+            individual_output['usage'] = 'm'
     #Preambles
     if font == 'cmcsc' and code >= 0 and code <= 10:#mathsc:
         preamble_list.append('\\DeclareMathAlphabet{\\mathsc}{OT1}{cmr}{m}{sc}')
-    
-    if font == 'cmsy' and code >= 65 and code <= 90:#mathcal
-        individual_output['value'] = tex_string[-2]
-        individual_output['font'] = 'mathcal'
     if latex_package_list:
         individual_output['packages'] = latex_package_list
     if preamble_list:
